@@ -9,9 +9,6 @@ import {
   Button,
   ContextContainer,
   createStyles,
-  DatePicker,
-  MultiSelect,
-  Select,
   Stack,
   TableInput,
   TextInput,
@@ -34,6 +31,10 @@ import {
 import { addErrorAlert } from '@layout/alert';
 import deleteUserAgentById from '@users/request/deleteUserAgentById';
 import listUsers from '@users/request/listUsers';
+import Select from "react-select";
+// import DatePicker from "react-datepicker";
+
+// import "react-datepicker/dist/react-datepicker.css";
 
 const Styles = createStyles((theme) => ({}));
 
@@ -119,17 +120,23 @@ const Admins = ({ onNextLabel, onNext = () => {} }) => {
     try {
       store.saving = true;
       render();
-
       const usersByCenter = {};
       forEach(store.users, ({ centers, ...user }) => {
+        console.log(centers, user)
         forEach(centers, (center) => {
-          if (!usersByCenter[center]) {
-            usersByCenter[center] = [];
+          console.log("center", center)
+          let centerValue = center.value;
+          console.log(centerValue)
+          if (!usersByCenter[centerValue]) {
+            usersByCenter[centerValue] = [];
           }
-          usersByCenter[center].push(user);
+          user.gender = user.gender.value;
+          usersByCenter[centerValue].push(user);
+          
+          console.log(usersByCenter)
         });
       });
-
+      console.log(usersByCenter)
       const userAgentIdsToRemove = [];
       forEach(store.userAgents, ({ center, user, id }) => {
         if (!usersByCenter[center.id] || !find(usersByCenter[center.id], { id: user.id })) {
@@ -140,6 +147,7 @@ const Admins = ({ onNextLabel, onNext = () => {} }) => {
       await Promise.all(map(userAgentIdsToRemove, (id) => deleteUserAgentById(id)));
 
       const centerIds = Object.keys(usersByCenter);
+      console.log(centerIds)
       for (let i = 0, l = centerIds.length; i < l; i++) {
         // eslint-disable-next-line no-await-in-loop
         await addUsersBulkRequest({
@@ -269,7 +277,7 @@ const Admins = ({ onNextLabel, onNext = () => {} }) => {
       Header: tU('birthdayHeader'),
       accessor: 'birthdate',
       input: {
-        node: <DatePicker disabled={!store.profile || !!store.user} required />,
+        node: <TextInput disabled={!store.profile || !!store.user} required />,
         rules: { required: tU('birthdayHeaderRequired') },
       },
       valueRender: (value) => <>{new Date(value).toLocaleString()}</>,
@@ -280,7 +288,7 @@ const Admins = ({ onNextLabel, onNext = () => {} }) => {
       input: {
         node: (
           <Select
-            data={[
+            options={[
               { label: tU('male'), value: 'male' },
               { label: tU('female'), value: 'female' },
             ]}
@@ -290,7 +298,7 @@ const Admins = ({ onNextLabel, onNext = () => {} }) => {
         ),
         rules: { required: tU('genderHeaderRequired') },
       },
-      valueRender: (value) => <>{tU(value)}</>,
+      valueRender: (value) => <>{tU(value.value)}</>,
     });
     result.tableColumns.push({
       Header: tU('tagsHeader'),
@@ -303,25 +311,26 @@ const Admins = ({ onNextLabel, onNext = () => {} }) => {
           />
         ),
       },
-      valueRender: (values) => map(values, (value, index) => `${index ? ', ' : ''}${value}`),
+      valueRender: (values) => map(values, (value, index) => `${index ? ', ' : ''}${value.va}`),
     });
     result.tableColumns.push({
       Header: tU('centersLabel'),
       accessor: 'centers',
       input: {
         node: (
-          <MultiSelect
-            data={store.centers}
+          <Select
+            options={store.centers}
             disabled={!store.profile || store.userEmailAlreadyAdded}
+            isMulti={true}
           />
         ),
         rules: {
           required: tU('centersRequired'),
         },
       },
-      valueRender: (values) =>
-        map(values, (id) => <Badge label={store.centersById[id]} closable={false} />),
-    });
+      valueRender: (values) => map(values, (id) => <Badge label={id.label} closable={false} />)
+
+      });
     return result;
   }, [
     t,

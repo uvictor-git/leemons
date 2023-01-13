@@ -67,6 +67,13 @@
     "test": "jest"
   },
   "dependencies": {
-    "babel-eslint": "^10.1.0"
+    "babel-eslint": "^10.1.0",
+    "react-select": "^5.7.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   }
 }

@@ -44,7 +44,7 @@ module.exports = ({ id, folder, filename: basename }) => {
             });
 
             // Gzipped file stream
-            const gzippedFile = fs.createWriteStream(newName).on('error', () => {
+            const gzippedFile = fs.createWriteStream('logs/loggerfile.log.gz').on('error', (e) => {
               reject(new Error(`The gzipped log file can not be created`));
             });
 

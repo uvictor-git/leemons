@@ -44,6 +44,7 @@ async function recover(email, ctx) {
       code: global.utils.randomString(12),
     });
   }
+  console.log("reset", )
   if (leemons.getPlugin('emails')) {
     const hostname = await getHostname();
     await leemons

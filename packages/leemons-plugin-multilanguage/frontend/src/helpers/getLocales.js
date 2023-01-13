@@ -1,8 +1,8 @@
 import useSWR from 'swr';
 
 export async function getLocales(callback = () => {}) {
-  const fetchedLocales = (await fetch('/api/multilanguage/locales').then((r) => r.json())).locales;
-
+  const fetchedLocales = (await fetch('/api/multilanguage/locales').then((r) => { console.log("sssssssssssssssssss", r); r.json()})).locales;
+  
   if (fetchedLocales) {
     callback(fetchedLocales);
   }

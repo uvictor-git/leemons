@@ -37,6 +37,10 @@
       {},
       {
         "usePrettierrc": true
+      },
+      "error",
+      {
+        "endOfLine": "auto"
       }
     ],
     "import/no-names-as-default": "off",

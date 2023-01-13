@@ -7,7 +7,7 @@ import {
   createStyles,
   Drawer,
   InputWrapper,
-  Select,
+  // Select,
   Stack,
   TextInput,
 } from '@bubbles-ui/components';
@@ -21,6 +21,7 @@ import countryList from 'country-region-data';
 import useRequestErrorMessage from '@common/useRequestErrorMessage';
 import { addErrorAlert } from '@layout/alert';
 import { addCenterRequest } from '@users/request';
+import Select from "react-select";
 
 const Styles = createStyles((theme) => ({
   inputContent: {
@@ -81,12 +82,15 @@ const AddCenterDrawer = ({ opened, onClose, onSave, center = {} }) => {
   }
 
   async function onSubmit({ created_at, deleted_at, updated_at, deleted, ...data }) {
+    // TEMP, need to look find away
+    console.log(data)
     try {
       store.saving = true;
       render();
       const { center: c } = await addCenterRequest(data);
       onSave(c);
     } catch (err) {
+      console.log(err)
       addErrorAlert(getErrorMessage(err));
     }
     store.saving = false;
@@ -129,7 +133,7 @@ const AddCenterDrawer = ({ opened, onClose, onSave, center = {} }) => {
                   control={control}
                   rules={r('preferredLanguageRequired')}
                   render={({ field }) => (
-                    <Select data={store.locales} error={errors.locale} {...field} />
+                    <Select options={store.locales} error={errors.locale} {...field} />
                   )}
                 />
               </Stack>
@@ -140,7 +144,7 @@ const AddCenterDrawer = ({ opened, onClose, onSave, center = {} }) => {
                   name="timezone"
                   control={control}
                   render={({ field }) => (
-                    <Select data={store.timeZones} error={errors.timeZone} {...field} />
+                    <Select options={store.timeZones} error={errors.timeZone} {...field} />
                   )}
                 />
               </Stack>
@@ -152,7 +156,7 @@ const AddCenterDrawer = ({ opened, onClose, onSave, center = {} }) => {
                   rules={r('firstDayOfWeekRequired')}
                   control={control}
                   render={({ field }) => (
-                    <Select data={store.dayWeeks} error={errors.firstDayOfWeek} {...field} />
+                    <Select options={store.dayWeeks} error={errors.firstDayOfWeek} {...field} />
                   )}
                 />
               </Stack>
@@ -186,7 +190,7 @@ const AddCenterDrawer = ({ opened, onClose, onSave, center = {} }) => {
                   name="country"
                   control={control}
                   render={({ field }) => (
-                    <Select data={store.countries} error={errors.country} {...field} />
+                    <Select options={store.countries} error={errors.country} {...field} />
                   )}
                 />
               </Stack>

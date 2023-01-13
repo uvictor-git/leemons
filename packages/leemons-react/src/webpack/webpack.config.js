@@ -159,6 +159,11 @@ module.exports = function webpackConfig({
               },
             },
             {
+              test: /\.json$/,
+              loader: require.resolve('json-loader'),
+              type: 'javascript/auto'
+            },
+            {
               test: /\.js|mjs|jsx$/,
               // exclude: /node_modules/,
               exclude: /node_modules\/(?!(@bubbles-ui\/*)\/).*/,

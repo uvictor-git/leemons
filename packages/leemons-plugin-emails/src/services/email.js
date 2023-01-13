@@ -367,6 +367,7 @@ class Email {
   }
 
   static async startToTrySendEmail(from, to, email, transporters, index) {
+    
     if (index < transporters.length) {
       try {
         const info = await transporters[index].sendMail({

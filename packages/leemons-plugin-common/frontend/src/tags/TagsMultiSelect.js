@@ -4,6 +4,7 @@ import { isArray } from 'lodash';
 import { MultiSelect, useDebouncedCallback } from '@bubbles-ui/components';
 import { useStore } from '../useStore';
 import { TagsService } from './TagsService';
+import Select from "react-select";
 
 function TagsMultiSelect({ pluginName, type, ...props }) {
   if (!isArray(props.value)) {
@@ -34,14 +35,15 @@ function TagsMultiSelect({ pluginName, type, ...props }) {
   }, []);
 
   return (
-    <MultiSelect
+    <Select
       {...props}
-      data={store.data.concat(store.newTags)}
+      options={store.data.concat(store.newTags)}
       searchable
       creatable
       getCreateLabel={(query) => `+ ${query}`}
       onSearchChange={search}
       onCreate={onCreate}
+      isMulti={true}
     />
   );
 }

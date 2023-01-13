@@ -16,7 +16,6 @@ const getHostname = require('../platform/getHostname');
  * */
 async function reset(token, password, ctx) {
   const config = await getResetConfig(token);
-
   return table.users.transaction(async (transacting) => {
     const values = await Promise.all([
       table.users.update(
@@ -26,7 +25,7 @@ async function reset(token, password, ctx) {
       ),
       table.userRecoverPassword.delete({ id: config.recoveryId }, { transacting }),
     ]);
-
+    
     if (leemons.getPlugin('emails')) {
       const hostname = await getHostname();
       await leemons

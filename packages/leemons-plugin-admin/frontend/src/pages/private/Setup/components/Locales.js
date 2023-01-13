@@ -7,7 +7,6 @@ import {
   Button,
   ContextContainer,
   Paragraph,
-  Select,
   Stack,
   TableInput,
 } from '@bubbles-ui/components';
@@ -16,6 +15,8 @@ import LocalePicker from '@admin/components/LocalePicker';
 import { getLanguagesRequest, setLanguagesRequest } from '@admin/request/settings';
 import useTranslateLoader from '@multilanguage/useTranslateLoader';
 import prefixPN from '@admin/helpers/prefixPN';
+import { LOCALES } from '../../../../constants';
+import Select from "react-select";
 
 const Locales = ({ configured, onNextLabel, onNext = () => {} }) => {
   const [localesData, setLocalesData] = React.useState([]);
@@ -133,12 +134,13 @@ const Locales = ({ configured, onNextLabel, onNext = () => {} }) => {
           {!isEmpty(locales) && (
             <Select
               label={t('languages.defaultLang.title')}
-              description={t('languages.defaultLang.description')}
-              data={localesData.filter((item) => locales.find((l) => l.code === item.value))}
+              //description={t('languages.defaultLang.description')}
+              defaultValue={defaultLocale}
+              options={LOCALES}
               value={defaultLocale}
               onChange={setDefaultLocale}
               disabled={configured}
-              contentStyle={{ maxWidth: 262 }}
+              width={26}
             />
           )}
           <Alert type="info" closeable={false}>

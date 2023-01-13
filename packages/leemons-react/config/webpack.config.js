@@ -12,9 +12,8 @@ const appRoot = path.resolve(__dirname, '..');
 const isDev = process.env.NODE_ENV !== 'production';
 const isProduction = !isDev;
 const useDebug = process.env.DEBUG;
-
 /** @type {import('webpack').Configuration} */
-module.exports = ({ alias, filesToCopy, useLegacy = false }) => ({
+odule.exports = ({ alias, filesToCopy, useLegacy = false }) => ({
   mode: isDev ? 'development' : 'production',
   // Stop compilation on first error if production mode
   bail: isProduction,
@@ -163,6 +162,11 @@ module.exports = ({ alias, filesToCopy, useLegacy = false }) => ({
             issuer: {
               and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
             },
+          },
+          {
+            test: /\.json$/,
+            loader: require.resolve('json-loader'),
+            type: 'javascript/auto'
           },
           {
             test: /\.js|mjs|jsx$/,

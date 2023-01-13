@@ -18,12 +18,18 @@ async function add({ id, name, locale, ...centerData }, { transacting: _transact
         throw new Error(`Center with name '${name}' already exists`);
 
       if (translations()) {
-        if (!(await translations().locales.has(locale, { transacting }))) {
+        if (!(await translations().locales.has(locale.value, { transacting }))) {
           throw new Error(`The locale '${locale}' not exists`);
         }
       }
 
       let center = null;
+      locale = locale.value;
+      
+      Object.keys(centerData).forEach(key => {
+        if (centerData[key] != null && centerData[key].value)
+        centerData[key] = centerData[key].value
+      });
       if (id) {
         leemons.log.info(`Updating center '${name}'`);
         center = await table.centers.update(
